@@ -1,0 +1,175 @@
+<idea-plugin url="https://plugins.jetbrains.com" allow-bundled-update="true">
+    <id>com.dute7liang.restful.search</id>
+    <name>RestfulSearch</name>
+    <version>1.0.0</version>
+    <vendor email="383200134@qq.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
+
+    <description><![CDATA[
+  <h3>RestfulSearch for RESTful services development.</h3>
+  <ul>
+   <li>1.ONE STEP to navigate to service declaration. ( use: Ctrl + \ or Ctrl + Alt + N ) </li>
+   <li>2.Show RESTful services structure.</li>
+   <li>3.A simple http request tool.</li>
+   <li>4.Add some useful functions at request method, Generate&amp;Copy Query Param, Generate&amp;Copy URL, etc. </li>
+   <li>5.Other functions: Convert to JSON; to java class，format json data <em>( Windows: Ctrl + Enter; Mac: Command + Enter ) .</li>
+ </ul>
+   <p> support Spring framework (Spring MVC / Spring Boot)
+   <p> support JAX-RS
+   <p> support Java and Kotlin languages
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="261.*"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>com.intellij.properties</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="RestServices"
+                    anchor="right"
+                    icon="/icons/service.png"
+                    factoryClass="com.dute7liang.restful.navigator.RestServicesToolWindowFactory"/>
+        <projectService serviceImplementation="com.dute7liang.restful.navigator.RestServicesNavigator"/>
+        <projectService serviceImplementation="com.dute7liang.restful.navigator.RestServiceProjectsManager"/>
+        <projectService serviceImplementation="com.dute7liang.restful.navigation.action.GotoRequestMappingConfiguration"/>
+        <tipAndTrick feature-id="navigation.popup.service" file="GotoService.html"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true"/>
+    </extensions>
+
+
+    <actions>
+        <action id="Popup.PopupChoiceAction"
+                class="com.dute7liang.restful.popup.action.PopupChoiceAction"
+                text="Popup RestfulSearch ..."
+                description="Popup RestfulSearch ...">
+            <add-to-group group-id="EditMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift R"/>
+        </action>
+
+        <!--在controller method 中添加 RestfulSearch 弹出操作，generate rest url、generate rest url with Possibly params （添加可能的参数，解析实体，@RequestBody）、gen json、
+        gen key value for postman(postman 参数bulk edit)、 gen key value for apiview submit -->
+        <!--rest 方法中添加-->
+        <group id="RestfulToolkitGroup" text="RestfulSearch"
+               description="RestfulSearch actions for rest method group"
+        >
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+            <action class="com.dute7liang.restful.method.action.GenerateFullUrlAction" id="GenerateFullRestUrl"
+                    text="Generate &amp;&amp; Copy Full URL">
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            </action>
+            <action class="com.dute7liang.restful.method.action.GenerateUrlAction" id="GenerateRestUrl"
+                    text="Generate &amp;&amp; Copy Relation URL">
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            </action>
+            <action class="com.dute7liang.restful.method.action.GenerateQueryParamJsonAction" id="GenerateRequestBodyJson"
+                    text="Generate &amp;&amp; Copy RequestBody (JSON)">
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            </action>
+            <action class="com.dute7liang.restful.method.action.GenerateQueryParamAction" id="BuildQueryParam"
+                    text="Generate &amp;&amp; Copy Query Param (Key Value)">
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            </action>
+            <!--jaxrs-->
+
+        </group>
+
+
+        <group id="RestfulToolkit.RestMethod.EditorPopupMenu" text="RestfulSearch"
+               description="RestfulSearch"
+               popup="false">
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="last" relative-to-action="EditorToggleColumnMode"/>-->
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <!--<reference ref="GenerateRestUrl"/>-->
+        </group>
+
+
+        <!--实体中添加 gen json、
+        gen key value for postman( postman 参数 bulk edit )-->
+
+
+        <!--跳转导航： 根据rest url 导航 参考 request mapper  ( Enter mapping url ) 快捷键用 ctl alt n -->
+
+        <!-- show services -->
+        <action id="ConvertClassToJSONAction" class="com.dute7liang.restful.action.ConvertClassToJSONAction"
+                text="Convert to JSON" description="Convert to JSON">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="ConvertClassToJSONCompressedAction"
+                class="com.dute7liang.restful.action.ConvertClassToJSONCompressedAction" text="Convert to JSON (Compressed)"
+                description="Convert to JSON (Compressed)">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="ConvertClassToBulkValueAction" class="com.dute7liang.restful.action.ConvertClassToBulkValueAction"
+                text="Convert to Bulk Value" description="Convert to Bulk Value">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <!-- url 导航 -->
+        <action id="Toolkit.GotoService" class="com.dute7liang.restful.navigation.action.GotoRequestMappingAction"
+                text="_Service" description="Go to Service"
+                icon="AllIcons.Actions.Search">
+            <add-to-group group-id="GoToTargetEx" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
+        </action>
+
+        <!--code gen-->
+        <!--
+              <action class="com.dute7liang.restful.codegen.SpringBootGenerator" id="CodeGen"
+                      text="SpringBoot Generator"
+                      description="SpringBoot Generator">
+                  <add-to-group group-id="GenerateGroup" anchor="first"/>
+              </action>
+        -->
+
+        <!--刷新-->
+        <action id="Toolkit.RefreshServices" class="com.dute7liang.restful.navigator.RefreshProjectAction"
+                text="Refresh Services in Project"
+                icon="AllIcons.Actions.Refresh">
+        </action>
+
+        <group id="Toolkit.NavigatorActionsToolbar">
+            <reference id="Toolkit.RefreshServices"/>
+            <separator/>
+            <reference id="Toolkit.GotoService"/>
+            <separator/>
+        </group>
+
+        <group id="Toolkit.NavigatorServiceMenu">
+            <action id="Menu.CopyFullUrlAction" class="com.dute7liang.restful.navigator.CopyFullUrlAction"
+                    text="Copy Full Url"
+                    icon="AllIcons.Actions.Copy">
+            </action>
+            <action id="Menu.EditSourceAction" class="com.dute7liang.restful.navigator.EditSourceAction"
+                    text="Jump to Source"
+                    icon="AllIcons.Actions.EditSource">
+            </action>
+            <separator/>
+        </group>
+
+        <!--      <action id="SpringBootAppRunnerAction" class="com.dute7liang.restful.runner.SpringBootAppRunnerAction" text="SpringBootAppRunnerAction"
+                      description="SpringBootAppRunnerAction">
+                  &lt;!&ndash;<add-to-group group-id="RunnerActions" anchor="after" relative-to-action=""/>&ndash;&gt;
+                  <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
+              </action>
+              -->
+
+    </actions>
+    <projectListeners>
+        <listener class="com.dute7liang.restful.navigator.MyToolwindowListener" topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener" />
+    </projectListeners>
+</idea-plugin>
