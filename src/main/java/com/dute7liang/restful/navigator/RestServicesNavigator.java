@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import java.awt.*;
 import java.net.URL;
 
@@ -40,6 +42,7 @@ public class RestServicesNavigator implements PersistentStateComponent<RestServi
 	protected RestServiceStructure myStructure;
 
 	RestServicesNavigatorState myState = new RestServicesNavigatorState();
+	private final Object stateLock = new Object();
 
 	private SimpleTree myTree;
 
@@ -87,6 +90,18 @@ public class RestServicesNavigator implements PersistentStateComponent<RestServi
 		myTree.getEmptyText().clear();
 
 		myTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		myTree.addTreeSelectionListener(e -> cacheTreeStateOnEdt());
+		myTree.addTreeExpansionListener(new TreeExpansionListener() {
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				cacheTreeStateOnEdt();
+			}
+
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+				cacheTreeStateOnEdt();
+			}
+		});
 	}
 
 	public void createToolWindowContent(ToolWindow toolWindow) {
@@ -171,6 +186,8 @@ public class RestServicesNavigator implements PersistentStateComponent<RestServi
 					return;
 				}
 				myStructure.updateProjects(projects);
+				applyCachedTreeStateOnEdt();
+				cacheTreeStateOnEdt();
 			}, myProject.getDisposed());
 		});
 	}
@@ -182,23 +199,58 @@ public class RestServicesNavigator implements PersistentStateComponent<RestServi
 	@Nullable
 	@Override
 	public RestServicesNavigatorState getState() {
-		ApplicationManager.getApplication().assertIsDispatchThread();
-		if (myStructure != null) {
-			try {
-				myState.treeState = new Element("root");
-				TreeState.createOn(myTree).writeExternal(myState.treeState);
-			}
-			catch (WriteExternalException e) {
-				LOG.warn(e);
-			}
-		}
-		return myState;
+		return copyState();
 	}
 
 	@Override
 	public void loadState(RestServicesNavigatorState state) {
-		myState = state;
+		synchronized (stateLock) {
+			myState.showPort = state.showPort;
+			myState.treeState = state.treeState == null ? null : (Element) state.treeState.clone();
+		}
 		scheduleStructureUpdate();
+	}
+
+	private void cacheTreeStateOnEdt() {
+		if (!ApplicationManager.getApplication().isDispatchThread() || myTree == null) {
+			return;
+		}
+
+		try {
+			Element treeState = new Element("root");
+			TreeState.createOn(myTree).writeExternal(treeState);
+			synchronized (stateLock) {
+				myState.treeState = treeState;
+			}
+		}
+		catch (WriteExternalException e) {
+			LOG.warn(e);
+		}
+	}
+
+	private void applyCachedTreeStateOnEdt() {
+		if (!ApplicationManager.getApplication().isDispatchThread() || myTree == null) {
+			return;
+		}
+
+		Element treeState;
+		synchronized (stateLock) {
+			treeState = myState.treeState == null ? null : (Element) myState.treeState.clone();
+		}
+		if (treeState == null) {
+			return;
+		}
+
+		TreeState.createFrom(treeState).applyTo(myTree);
+	}
+
+	private RestServicesNavigatorState copyState() {
+		RestServicesNavigatorState state = new RestServicesNavigatorState();
+		synchronized (stateLock) {
+			state.showPort = myState.showPort;
+			state.treeState = myState.treeState == null ? null : (Element) myState.treeState.clone();
+		}
+		return state;
 	}
 
 }
