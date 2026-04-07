@@ -1,11 +1,25 @@
-# Created by .ignore support plugin (hsz.mobi)
-build
-idea-sandbox
-/out/
-/MybatisX.iml
+# Gradle
 .gradle/
-.idea
+build/
+
+# IntelliJ IDEA
+.idea/
 *.iml
+out/
+
+# IntelliJ Platform plugin sandbox and caches
+.intellijPlatform/
+idea-sandbox/
+
+# Local environment
 local.properties
-.intellijPlatform
-.workflow
+
+# Workflow files
+.workflow/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
