@@ -1,31 +1,30 @@
 ![RestfulSearch](asset/product_name.png)
-
 # RestfulSearch
 
-面向 IntelliJ IDEA 的 RESTful 路由搜索与定位插件。
+RestfulSearch 是一款面向 IntelliJ IDEA 的插件，旨在帮助开发者快速搜索和定位项目中的 RESTful 路由定义。
 
-## Overview
+## 主要功能 (Main Features)
 
-RestfulSearch 聚焦一件事：在 IDE 内更快地搜索和定位接口定义。
+- **路由搜索**：支持根据 URL 或 Mapping 路径快速检索接口。
+- **精准定位**：从搜索结果直接跳转至对应的控制器（Controller）方法声明。
+- **多框架支持**：兼容 Spring 体系及 JAX-RS 标准。
+- **现代化架构**：适配 IntelliJ IDEA 最新版本及 Kotlin K2 模式。
 
-- 根据 URL / Mapping 快速定位接口实现
-- 支持在项目中搜索 RESTful 路由
-- 支持常见 Spring / JAX-RS 场景下的接口跳转
+## 快捷键 (Shortcuts)
 
-## Features
+您可以通过以下快捷键呼出搜索对话框：
+- `Ctrl` + `\`
+- `Ctrl` + `Alt` + `N`
 
-- One step navigation to service declaration
-- Search RESTful routes by URL or mapping path
-- Focus on route search and source navigation
+## 技术栈支持 (Stack Support)
 
-## Stack Support
+- **Frameworks**: Spring Boot, Spring MVC, JAX-RS (Jersey, RESTEasy)
+- **Languages**: Java, Kotlin
 
-- Spring MVC
-- Spring Boot
-- JAX-RS
-- Java
-- Kotlin
+## 致谢 (Credits)
 
-## Credits
+本项目基于 [RestfulToolkit](https://github.com/mrmanzhaow/RestfulToolkit) 进行了优化与迭代，感谢原作者及社区的贡献。
 
-This project is based on and inspired by [RestfulToolkit](https://github.com/mrmanzhaow/RestfulToolkit).
+---
+
+Copyright © 2026 [dute7liang](https://github.com/dute7liang). Licensed under the [Apache 2.0 License](LICENSE).

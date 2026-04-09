@@ -2,18 +2,55 @@
     <id>com.dute7liang.restful.search</id>
     <name>RestfulSearch</name>
     <version>1.0.0</version>
-    <vendor email="383200134@qq.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
+    <vendor email="dute7liangg@gmail.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
 
     <description><![CDATA[
-  <h3>RestfulSearch</h3>
-  <p>Search and navigate REST endpoints in IntelliJ IDEA.</p>
+  <p>Restful Search is a lightweight plugin designed for quick navigation of RESTful web services within IntelliJ IDEA.</p>
+
+  <p><b>Core Features:</b></p>
   <ul>
-   <li>Find REST services by URL or mapping path.</li>
-   <li>Jump directly to endpoint declarations from the search popup.</li>
-   <li>Use Ctrl + \ or Ctrl + Alt + N to open the REST service search popup.</li>
-   <li>Supports Spring MVC, Spring Boot, JAX-RS, Java, and Kotlin.</li>
- </ul>
-    ]]></description>
+    <li>Search for REST endpoints by URL path or mapping patterns.</li>
+    <li>Navigate directly from the search popup to the corresponding controller method.</li>
+    <li>Support for Spring MVC, Spring Boot, and JAX-RS (Jersey, RESTEasy) annotations.</li>
+    <li>Fully compatible with Java, Kotlin, and the new K2 Kotlin mode.</li>
+  </ul>
+
+  <p><b>Usage:</b></p>
+  <ul>
+    <li>Invoke the search popup using the shortcut <kbd>Ctrl</kbd> + <kbd>\</kbd> or <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd>.</li>
+    <li>Search results are displayed in a unified list with HTTP method indicators (GET, POST, etc.).</li>
+  </ul>
+
+  <hr>
+
+  <p><b>Restful Search 是一款用于快速定位和跳转 REST 服务接口的轻量级插件。</b></p>
+
+  <p><b>核心功能：</b></p>
+  <ul>
+    <li>支持通过 URL 路径或 Mapping 模式搜索 REST 接口。</li>
+    <li>支持从搜索弹窗直接跳转到对应的 Controller 方法定义处。</li>
+    <li>支持 Spring MVC, Spring Boot 以及 JAX-RS (Jersey, RESTEasy) 注解。</li>
+    <li>完美兼容 Java、Kotlin 以及最新的 K2 Kotlin 模式。</li>
+  </ul>
+
+  <p><b>使用说明：</b></p>
+  <ul>
+    <li>使用快捷键 <kbd>Ctrl</kbd> + <kbd>\</kbd> 或 <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd> 呼出搜索框。</li>
+    <li>搜索结果以统一列表展示，并带有 HTTP 方法标识（GET, POST 等）。</li>
+  </ul>
+
+  <p><i>Note: This version is optimized for IntelliJ IDEA 2026.1. Compatibility for older versions is currently under evaluation.</i></p>
+]]></description>
+    <change-notes><![CDATA[
+  <h4>1.0.0</h4>
+  <ul>
+    <li>Initial release of Restful Search.</li>
+    <li>Added support for Spring Boot and JAX-RS endpoint discovery.</li>
+    <li>Added "Goto Service" navigation popup (Ctrl + \).</li>
+    <li>Optimized for IntelliJ IDEA 2026.1 and Kotlin K2 mode.</li>
+  </ul>
+  <p>初始版本发布，支持 Spring 及 JAX-RS 框架接口搜索，针对 2026.1 版本深度优化。</p>
+]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="261.*"/>
@@ -49,22 +86,5 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
         </action>
-
-        <!--code gen-->
-        <!--
-              <action class="com.dute7liang.restful.codegen.SpringBootGenerator" id="CodeGen"
-                      text="SpringBoot Generator"
-                      description="SpringBoot Generator">
-                  <add-to-group group-id="GenerateGroup" anchor="first"/>
-              </action>
-        -->
-
-        <!--      <action id="SpringBootAppRunnerAction" class="com.dute7liang.restful.runner.SpringBootAppRunnerAction" text="SpringBootAppRunnerAction"
-                      description="SpringBootAppRunnerAction">
-                  &lt;!&ndash;<add-to-group group-id="RunnerActions" anchor="after" relative-to-action=""/>&ndash;&gt;
-                  <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
-              </action>
-              -->
-
     </actions>
 </idea-plugin>
