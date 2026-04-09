@@ -5,11 +5,13 @@
     <vendor email="383200134@qq.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
 
     <description><![CDATA[
-  <h3>RestfulSearch for RESTful route search and navigation.</h3>
+  <h3>RestfulSearch</h3>
+  <p>Search and navigate REST endpoints in IntelliJ IDEA.</p>
   <ul>
-   <li>1.ONE STEP to navigate to service declaration. ( use: Ctrl + \ or Ctrl + Alt + N ) </li>
-   <li>2.Search RESTful routes by URL or mapping path.</li>
-   <li>3.Support Spring framework (Spring MVC / Spring Boot), JAX-RS, Java and Kotlin.</li>
+   <li>Find REST services by URL or mapping path.</li>
+   <li>Jump directly to endpoint declarations from the search popup.</li>
+   <li>Use Ctrl + \ or Ctrl + Alt + N to open the REST service search popup.</li>
+   <li>Supports Spring MVC, Spring Boot, JAX-RS, Java, and Kotlin.</li>
  </ul>
     ]]></description>
 
