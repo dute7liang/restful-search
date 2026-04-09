@@ -2,24 +2,21 @@
 
 # RestfulSearch
 
-RESTful 开发辅助插件，面向 IntelliJ IDEA，专注于接口导航、服务结构查看和请求信息快速生成。
+面向 IntelliJ IDEA 的 RESTful 路由搜索与定位插件。
 
 ## Overview
 
-RestfulSearch 把 RESTful 开发里最常见的几个动作放回 IDE 内完成：
+RestfulSearch 聚焦一件事：在 IDE 内更快地搜索和定位接口定义。
 
 - 根据 URL / Mapping 快速定位接口实现
-- 以树形结构查看项目中的 RESTful 服务
-- 快速生成并复制 URL、Query Param、RequestBody
-- 提供类转 JSON、Bulk Value 等常用辅助能力
+- 支持在项目中搜索 RESTful 路由
+- 支持常见 Spring / JAX-RS 场景下的接口跳转
 
 ## Features
 
 - One step navigation to service declaration
-- RESTful services tree in tool window
-- Generate and copy full URL / relative URL
-- Generate query params and request body
-- Convert class to JSON / compressed JSON / bulk value
+- Search RESTful routes by URL or mapping path
+- Focus on route search and source navigation
 
 ## Stack Support
 

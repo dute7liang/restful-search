@@ -2,14 +2,12 @@ package com.dute7liang.restful.common;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.dute7liang.restful.common.resolver.JaxrsResolver;
 import com.dute7liang.restful.common.resolver.ServiceResolver;
 import com.dute7liang.restful.common.resolver.SpringResolver;
 import com.dute7liang.restful.navigation.action.RestServiceItem;
-import com.dute7liang.restful.navigator.RestServiceProject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,21 +22,6 @@ public class ServiceHelper {
 
     public ServiceHelper(PsiMethod psiMethod) {
         this.psiMethod = psiMethod;
-    }
-
-    public static List<RestServiceProject> buildRestServiceProjectListUsingResolver(Project project) {
-//        System.out.println("buildRestServiceProjectList");
-        List<RestServiceProject> serviceProjectList = new ArrayList<>();
-
-        Module[] modules = ModuleManager.getInstance(project).getModules();
-        for (Module module : modules) {
-            List<RestServiceItem> restServices = buildRestServiceItemListUsingResolver(module);
-            if (restServices.size() > 0) {
-                serviceProjectList.add(new RestServiceProject(module, restServices));
-            }
-        }
-
-        return serviceProjectList;
     }
 
     public static List<RestServiceItem> buildRestServiceItemListUsingResolver(Module module) {

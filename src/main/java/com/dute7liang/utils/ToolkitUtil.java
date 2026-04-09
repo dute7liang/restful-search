@@ -123,41 +123,4 @@ public class ToolkitUtil {
         return pattern;
     }
 
-
-    @NotNull
-    public static String textToRequestParam(String text) {
-        StringBuilder param = new StringBuilder();
-
-        Map<String, String> paramMap = textToParamMap(text);
-
-        if (paramMap.size() > 0) {
-            paramMap.forEach((s, o) -> param.append(s).append("=").append(o).append("&"));
-        }
-
-        return param.length() == 0 ? "" : param.deleteCharAt(param.length() - 1).toString();
-    }
-
-
-    @NotNull
-    public static Map<String, String> textToParamMap(String text) {
-        Map<String, String> paramMap = new HashMap<>();
-        String paramText = text;
-        String[] lines = paramText.split("\n");
-
-        for (String line : lines) {
-            if (!line.startsWith("//") && line.contains(":")) {
-
-                String[] prop = line.split(":");
-
-                if (prop.length > 1) {
-                    String key = prop[0].trim();
-                    String value = prop[1].trim();
-                    paramMap.put(key, value);
-                }
-            }
-        }
-        return paramMap;
-    }
-
-
 }

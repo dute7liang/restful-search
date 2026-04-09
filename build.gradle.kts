@@ -39,9 +39,7 @@ dependencies {
         platformBundledPlugins.forEach { bundledPlugin(it) }
     }
 
-    implementation("com.google.code.gson:gson:${providers.gradleProperty("gsonVersion").get()}")
     implementation("commons-lang:commons-lang:${providers.gradleProperty("commonsLangVersion").get()}")
-    implementation("com.fifesoft:rsyntaxtextarea:${providers.gradleProperty("rsyntaxtextareaVersion").get()}")
     implementation("org.yaml:snakeyaml:${providers.gradleProperty("snakeyamlVersion").get()}")
 }
 
