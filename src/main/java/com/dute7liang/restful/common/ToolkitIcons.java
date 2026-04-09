@@ -1,6 +1,5 @@
 package com.dute7liang.restful.common;
 
-
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.dute7liang.restful.method.HttpMethod;
@@ -26,25 +25,15 @@ public class ToolkitIcons {
             return null;
         }
 
-        public static  Icon GET = IconLoader.getIcon("/icons/method/g.png",ToolkitIcons.class); // 16x16 GREEN
-        // post put patch
-        public static  Icon PUT = IconLoader.getIcon("/icons/method/p2.png",ToolkitIcons.class); // 16x16 ORANGE
-        public static  Icon POST = IconLoader.getIcon("/icons/method/p.png",ToolkitIcons.class); // 16x16 BLUE
-        public static  Icon PATCH = IconLoader.getIcon("/icons/method/p3.png",ToolkitIcons.class); // 16x16 GRAY
-        public static  Icon DELETE = IconLoader.getIcon("/icons/method/d.png",ToolkitIcons.class); // 16x16 RED
-        public static  Icon UNDEFINED = IconLoader.getIcon("/icons/method/undefined.png",ToolkitIcons.class); // 16x16 GRAY
-        // OPTIONS HEAD
+        public static Icon GET = IconLoader.getIcon("/icons/method/g.png", ToolkitIcons.class);
+        public static Icon PUT = IconLoader.getIcon("/icons/method/p2.png", ToolkitIcons.class);
+        public static Icon POST = IconLoader.getIcon("/icons/method/p.png", ToolkitIcons.class);
+        public static Icon PATCH = IconLoader.getIcon("/icons/method/p3.png", ToolkitIcons.class);
+        public static Icon DELETE = IconLoader.getIcon("/icons/method/d.png", ToolkitIcons.class);
+        public static Icon UNDEFINED = IconLoader.getIcon("/icons/method/undefined.png", ToolkitIcons.class);
     }
 
-    // public static final Icon MODULE = AllIcons.Modules.ModulesNode; // 16x16
-    public static final Icon MODULE = AllIcons.Nodes.ModuleGroup; // 16x16
-    public static final Icon Refresh = AllIcons.Actions.Refresh; // 16x16
-//    public static final Icon SERVICE = IconLoader.getIcon("/icons/service.png"); // 16x16
-
-//    public static final Icon SERVICE = IconLoader.getIcon("/icons/s1.png"); // 16x16
-//    public static final Icon SERVICE = IconLoader.getIcon("/icons/s2.png"); // 16x16
-//    public static final Icon SERVICE = IconLoader.getIcon("/icons/s3.png"); // 16x16
-    public static final Icon SERVICE = IconLoader.getIcon("/icons/service.png",ToolkitIcons.class); // 16x16
-
-
+    public static final Icon MODULE = AllIcons.Nodes.ModuleGroup;
+    public static final Icon Refresh = AllIcons.Actions.Refresh;
+    public static final Icon SERVICE = IconLoader.getIcon("/icons/service.png", ToolkitIcons.class);
 }

@@ -17,27 +17,17 @@ import org.jetbrains.kotlin.psi.KtNamedFunction;
 
 import javax.swing.*;
 
-//RequestMappingNavigationItem
 public class RestServiceItem implements NavigationItem {
-    private PsiMethod psiMethod; //元素
-    private PsiElement psiElement; //元素
+    private PsiMethod psiMethod; // Java 方法元素
+    private PsiElement psiElement; // 用于导航的 PSI 元素
     private Module module;
-
-    private String requestMethod; //请求方法 get/post...
-    private HttpMethod method;  //请求方法 get/post...
-
-    private String url; //url mapping;
+    private HttpMethod method; // 请求方法
+    private String url; // 请求映射路径
     private final String locationText;
     private final Project project;
     private final VirtualFile virtualFile;
     private final int navigationOffset;
-/*
-    private String methodName; //方法名称
 
-    private String hostContextPath; // todo 处理 http://
-    private PsiClass psiClass;
-    private boolean foundRequestBody;*/
-    //        ((KtClass) ((KtClassBody) psiElement.getParent()).getParent()).getModifierList().getAnnotationEntries().get(0).getText()
     public RestServiceItem(PsiElement psiElement, String requestMethod, String urlPath) {
         this.psiElement = psiElement;
         this.project = psiElement.getProject();
@@ -46,7 +36,6 @@ public class RestServiceItem implements NavigationItem {
         if (psiElement instanceof PsiMethod) {
             this.psiMethod = (PsiMethod) psiElement;
         }
-        this.requestMethod = requestMethod;
         if (requestMethod != null) {
             method = HttpMethod.getByRequestMethod(requestMethod);
         }
@@ -58,8 +47,7 @@ public class RestServiceItem implements NavigationItem {
     @Nullable
     @Override
     public String getName() {
-//        return  /*this.requestMethod + " " +*/ this.urlPath;
-        return  /*this.requestMethod + " " +*/ this.url;
+        return url;
     }
 
     @Nullable
@@ -84,12 +72,11 @@ public class RestServiceItem implements NavigationItem {
     public boolean canNavigateToSource() {
         return true;
     }
-
-
-    /*匹配*/
     public boolean matches(String queryText) {
         String pattern = queryText;
-        if (pattern.equals("/")) return true;
+        if (pattern.equals("/")) {
+            return true;
+        }
 
         com.intellij.psi.codeStyle.MinusculeMatcher matcher = com.intellij.psi.codeStyle.NameUtil.buildMatcher("*" + pattern, com.intellij.psi.codeStyle.NameUtil.MatchingCaseSensitivity.NONE);
         return matcher.matches(this.url);
@@ -120,11 +107,9 @@ public class RestServiceItem implements NavigationItem {
         @Nullable
         @Override
         public String getPresentableText() {
-//            return requestMethod  + " " + url;
             return url;
         }
 
-//        对应的文件位置显示
         @Nullable
         @Override
         public String getLocationString() {
@@ -134,7 +119,6 @@ public class RestServiceItem implements NavigationItem {
         @Nullable
         @Override
         public Icon getIcon(boolean unused) {
-//            System.out.println(unused + "  " + this.getPresentableText());
             return ToolkitIcons.METHOD.get(method);
         }
     }
@@ -173,33 +157,12 @@ public class RestServiceItem implements NavigationItem {
         }
 
         ModuleHelper moduleHelper = ModuleHelper.create(module);
-        // 处理 Mapping 设置个 value
-//        String fullUrl = moduleHelper.buildFullUrl(psiMethod);
-
         return moduleHelper.getServiceHostPrefix() + getUrl();
     }
 
-/*    public String getFullUrlWithParams() {
-        ModuleHelper moduleHelper = ModuleHelper.create(module);
-        String urlWithParams = moduleHelper.buildFullUrlWithParams(psiMethod);
-        return urlWithParams;
-    }*/
-
-    public void  setModule(Module module) {
+    public void setModule(Module module) {
         this.module = module;
     }
-
-/*    public String getHostContextPath() {
-        return hostContextPath;
-    }
-
-    public boolean isFoundRequestBody() {
-        return foundRequestBody;
-    }
-
-    public void setFoundRequestBody(boolean foundRequestBody) {
-        this.foundRequestBody = foundRequestBody;
-    }*/
 
     public PsiElement getPsiElement() {
         return psiElement;
