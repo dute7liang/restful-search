@@ -21,6 +21,11 @@ RestfulSearch 是一款面向 IntelliJ IDEA 的插件，旨在帮助开发者快
 - **Frameworks**: Spring Boot, Spring MVC, JAX-RS (Jersey, RESTEasy)
 - **Languages**: Java, Kotlin
 
+## 安装方式
+
+1. 在 IntelliJ IDEA 中：`Settings/Preferences` > `Plugins` > `Marketplace` > 搜索 **"RestfulSearch"**。
+2. 网页端下载：[JetBrains Marketplace - RestfulSearch](https://plugins.jetbrains.com/plugin/31175-restfulsearch)
+
 ## 致谢 (Credits)
 
 本项目基于 [RestfulToolkit](https://github.com/mrmanzhaow/RestfulToolkit) 进行了优化与迭代，感谢原作者及社区的贡献。
