@@ -20,80 +20,105 @@ import javax.swing.*;
 import java.util.Collection;
 
 /**
- * Model for "Go to | File" action
+ * “Go to Service”弹窗的数据模型，负责提示文案、过滤器和匹配规则。
+ *
+ * @author dute7liang
  */
 public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> implements DumbAware, CustomMatcherModel {
 
+    /**
+     * 创建服务搜索弹窗模型。
+     *
+     * @param project 当前项目
+     * @param contributors 名称贡献者列表
+     */
     protected GotoRequestMappingModel(@NotNull Project project, @NotNull ChooseByNameContributor[] contributors) {
         super(project, contributors);
     }
-// 设置过滤项
-/*    @Override
-    public synchronized void setFilterItems(Collection<HttpMethod> filterItems) {
-        super.setFilterItems(filterItems);
-    }*/
 
-    // TODO: 过滤模块？ FilteringGotoByModel.acceptItem 调用，结合 重写 setFilterItems或 getFilterItems() 实现，可过滤模块 或者 method (如GotoClassModel2过滤language，重写 getFilterItems())
+    /**
+     * 从导航项中提取过滤值，用于 HTTP 方法过滤器。
+     *
+     * @param item 当前导航项
+     * @return 当前项对应的 HTTP 方法
+     */
     @Nullable
     @Override
     protected HttpMethod filterValueFor(NavigationItem item) {
         if (item instanceof RestServiceItem) {
-//            if (((RestServiceItem) item).getModule().getName().contains("eureka")) {
-                return ((RestServiceItem) item).getMethod();
-//            }
+            return ((RestServiceItem) item).getMethod();
         }
 
         return null;
     }
 
-    /* 可选项 */
+    /**
+     * 返回当前可用的过滤项集合。
+     *
+     * @return 过滤项集合
+     */
     @Nullable
     @Override
     protected synchronized Collection<HttpMethod> getFilterItems() {
-        /*final Collection<Language> result = super.getFilterItems();
-        if (result == null) {
-            return null;
-        }
-        final Collection<Language> items = new HashSet<>(result);
-        items.add(Language.ANY);
-        return items;*/
-
-/*        ArrayList items = new ArrayList();
-        items.add(HttpMethod.POST);
-        return items;*/
         return super.getFilterItems();
-
     }
 
+    /**
+     * 返回弹窗输入提示。
+     *
+     * @return 提示文本
+     */
     @Override
     public String getPromptText() {
         return "Enter service URL path :";
     }
 
+    /**
+     * 返回在指定作用域中未命中结果时的提示。
+     *
+     * @return 未命中提示
+     */
     @Override
     public String getNotInMessage() {
-       return IdeBundle.message("label.no.matches.found.in.project");
-//        return "No matched method found";
+        return IdeBundle.message("label.no.matches.found.in.project");
     }
 
+    /**
+     * 返回完全未命中结果时的提示。
+     *
+     * @return 未找到提示
+     */
     @Override
     public String getNotFoundMessage() {
-       return IdeBundle.message("label.no.matches.found");
-//        return "Service path not found";
+        return IdeBundle.message("label.no.matches.found");
     }
 
+    /**
+     * 返回模块过滤复选框的快捷键。
+     *
+     * @return 复选框助记键
+     */
     @Override
     public char getCheckBoxMnemonic() {
-        return SystemInfo.isMac?'P':'n';
+        return SystemInfo.isMac ? 'P' : 'n';
     }
 
+    /**
+     * 读取“仅当前模块”复选框的初始状态。
+     *
+     * @return 初始勾选状态
+     */
     @Override
     public boolean loadInitialCheckBoxState() {
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(myProject);
         return propertiesComponent.isTrueValue("GoToRestService.OnlyCurrentModule");
     }
 
-    /* 选择 item 跳转触发 */
+    /**
+     * 保存“仅当前模块”复选框的状态。
+     *
+     * @param state 当前勾选状态
+     */
     @Override
     public void saveInitialCheckBoxState(boolean state) {
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(myProject);
@@ -102,74 +127,91 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
         }
     }
 
+    /**
+     * 返回元素的完整名称，用于名称匹配。
+     *
+     * @param element 目标元素
+     * @return 元素完整名称
+     */
     @Nullable
     @Override
     public String getFullName(Object element) {
         return getElementName(element);
     }
 
-    // 截取 Separators 后面pattern
+    /**
+     * 指定路径匹配时使用的分隔符。
+     *
+     * @return 分隔符数组
+     */
     @NotNull
     @Override
     public String[] getSeparators() {
-//        return new String[]{":","?"};
-        return new String[]{"/","?"};
+        return new String[]{"/", "?"};
     }
 
-
-    /** return null to hide checkbox panel */
+    /**
+     * 返回“仅当前模块”复选框名称。
+     *
+     * @return 复选框名称
+     */
     @Nullable
     @Override
     public String getCheckBoxName() {
         return "Only This Module";
-//        return null;
     }
 
-
+    /**
+     * 指定命中结果后是否打开编辑器。
+     *
+     * @return 固定返回 {@code true}
+     */
     @Override
     public boolean willOpenEditor() {
         return true;
     }
 
-//    CustomMatcherModel 接口，Allows to implement custom matcher for matching items from ChooseByName popup
-    // todo: resolve PathVariable annotation
+    /**
+     * 自定义服务路径匹配规则，支持模糊匹配和 Ant 风格路径匹配。
+     *
+     * @param popupItem 候选项文本
+     * @param userPattern 用户输入模式
+     * @return 是否匹配成功
+     */
     @Override
     public boolean matches(@NotNull String popupItem, @NotNull String userPattern) {
         String pattern = userPattern;
-        if(pattern.equals("/")) return true;
+        if (pattern.equals("/")) return true;
         // REST风格的参数  @RequestMapping(value="{departmentId}/employees/{employeeId}")  PathVariable
         // REST风格的参数（正则） @RequestMapping(value="/{textualPart:[a-z-]+}.{numericPart:[\\d]+}")  PathVariable
-
-//        pattern = StringUtils.removeRedundancyMarkup(pattern);
-
-//        userPattern  输入的过滤文字
-//        DefaultChooseByNameItemProvider.buildPatternMatcher
         MinusculeMatcher matcher = NameUtil.buildMatcher("*" + pattern, NameUtil.MatchingCaseSensitivity.NONE);
         boolean matches = matcher.matches(popupItem);
         if (!matches) {
             AntPathMatcher pathMatcher = new AntPathMatcher();
-            matches = pathMatcher.match(popupItem,userPattern);
+            matches = pathMatcher.match(popupItem, userPattern);
         }
         return matches;
-//        return true;
-
     }
 
-// 没用 ？
+    /**
+     * 返回去除模型专属标记后的文本。
+     *
+     * @param pattern 原始模式
+     * @return 处理后的模式
+     */
     @NotNull
     @Override
     public String removeModelSpecificMarkup(@NotNull String pattern) {
         return super.removeModelSpecificMarkup(pattern);
-//        return "demo";
     }
 
-    /* TODO :重写渲染*/
+    /**
+     * 返回结果列表的渲染器。
+     *
+     * @return 列表渲染器
+     */
     @Override
     public ListCellRenderer getListCellRenderer() {
-
         return super.getListCellRenderer();
     }
-
-
-
 }

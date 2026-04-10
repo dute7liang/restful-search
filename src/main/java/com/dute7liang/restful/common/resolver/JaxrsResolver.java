@@ -19,104 +19,67 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
+/**
+ * 负责扫描 JAX-RS 控制器并生成可导航的 REST 服务项。
+ *
+ * @author dute7liang
+ */
+public class JaxrsResolver extends BaseServiceResolver {
 
-public class JaxrsResolver extends BaseServiceResolver  {
-
+    /**
+     * 创建模块级 JAX-RS 解析器。
+     *
+     * @param module 当前模块
+     */
     public JaxrsResolver(Module module) {
         myModule = module;
     }
 
+    /**
+     * 创建项目级 JAX-RS 解析器。
+     *
+     * @param project 当前项目
+     */
     public JaxrsResolver(Project project) {
         myProject = project;
     }
 
-    /*
-    protected List<RestServiceItem> getServiceItemList(PsiMethod psiMethod) {
-        List<RestServiceItem> itemList = new ArrayList<>();
-
-        String classUriPath = JaxrsAnnotationHelper.getClassUriPath(psiMethod.getContainingClass());
-
-        RequestPath[] methodUriPaths = JaxrsAnnotationHelper.getRequestPaths(psiMethod);
-
-        for (RequestPath methodUriPath : methodUriPaths) {
-            RestServiceItem item = createRestServiceItem(psiMethod, classUriPath, methodUriPath);
-            itemList.add(item);
-        }
-
-        return itemList;
-    }*/
-
-    /*@NotNull
-    public List<PsiMethod> getServicePsiMethodList(Project project, GlobalSearchScope globalSearchScope) {
-        List<PsiMethod> psiMethodList = new ArrayList<>();
-
-        for (PathMappingAnnotation supportedAnnotation : JaxrsPathAnnotation.values()) {
-
-// 标注了 jaxrs Path 注解的类
-            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(supportedAnnotation.getShortName(), project, globalSearchScope);
-
-            for (PsiAnnotation psiAnnotation : psiAnnotations) {
-                PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
-                PsiElement psiElement = psiModifierList.getParent();
-//                System.out.println("psiElement : "+ psiElement);
-
-                if (!(psiElement instanceof PsiClass)) continue;
-
-                PsiClass psiClass = (PsiClass) psiElement;
-                PsiMethod[] psiMethods = psiClass.getMethods();
-
-                if (psiMethods == null) {
-                    continue;
-                }
-
-                psiMethodList.addAll(Arrays.asList(psiMethods));
-
-            }
-        }
-        return psiMethodList;
-    }*/
-
-
+    /**
+     * 扫描搜索范围内的 JAX-RS 类和方法，构建 REST 服务项列表。
+     *
+     * @param project 当前项目
+     * @param globalSearchScope 当前搜索范围
+     * @return 扫描得到的服务项列表
+     */
     @Override
     public List<RestServiceItem> getRestServiceItemList(Project project, GlobalSearchScope globalSearchScope) {
         List<RestServiceItem> itemList = new ArrayList<>();
+        Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(JaxrsPathAnnotation.PATH.getShortName(), project, globalSearchScope);
 
-//        for (PathMappingAnnotation supportedAnnotation : JaxrsPathAnnotation.values()) {
+        for (PsiAnnotation psiAnnotation : psiAnnotations) {
+            PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
+            PsiElement psiElement = psiModifierList.getParent();
 
-// 标注了 jaxrs Path 注解的类
-//            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(supportedAnnotation.getShortName(), project, globalSearchScope);
-            Collection<PsiAnnotation> psiAnnotations = JavaAnnotationIndex.getInstance().get(JaxrsPathAnnotation.PATH.getShortName(), project, globalSearchScope);
+            if (!(psiElement instanceof PsiClass)) continue;
 
-            for (PsiAnnotation psiAnnotation : psiAnnotations) {
-                PsiModifierList psiModifierList = (PsiModifierList) psiAnnotation.getParent();
-                PsiElement psiElement = psiModifierList.getParent();
+            PsiClass psiClass = (PsiClass) psiElement;
+            PsiMethod[] psiMethods = psiClass.getMethods();
 
-                if (!(psiElement instanceof PsiClass)) continue;
-
-                PsiClass psiClass = (PsiClass) psiElement;
-                PsiMethod[] psiMethods = psiClass.getMethods();
-
-                if (psiMethods == null) {
-                    continue;
-                }
-
-//                psiMethodList.addAll(Arrays.asList(psiMethods));
-
-                String classUriPath = JaxrsAnnotationHelper.getClassUriPath(psiClass);
-
-                for (PsiMethod psiMethod : psiMethods) {
-                    RequestPath[] methodUriPaths = JaxrsAnnotationHelper.getRequestPaths(psiMethod);
-
-                    for (RequestPath methodUriPath : methodUriPaths) {
-                        RestServiceItem item = createRestServiceItem(psiMethod, classUriPath, methodUriPath);
-                        itemList.add(item);
-                    }
-                }
-
+            if (psiMethods == null) {
+                continue;
             }
-//        }
 
+            String classUriPath = JaxrsAnnotationHelper.getClassUriPath(psiClass);
+
+            for (PsiMethod psiMethod : psiMethods) {
+                RequestPath[] methodUriPaths = JaxrsAnnotationHelper.getRequestPaths(psiMethod);
+
+                for (RequestPath methodUriPath : methodUriPaths) {
+                    RestServiceItem item = createRestServiceItem(psiMethod, classUriPath, methodUriPath);
+                    itemList.add(item);
+                }
+            }
+        }
 
         return itemList;
     }

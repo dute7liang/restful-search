@@ -15,8 +15,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 负责解析 JAX-RS 注解中的类路径、方法路径和请求方法信息。
+ *
+ * @author dute7liang
+ */
 public class JaxrsAnnotationHelper {
 
+    /**
+     * 读取 JAX-RS {@code @Path} 注解上的 value 值。
+     *
+     * @param annotation 路径注解
+     * @return 注解值，不存在时返回空字符串
+     */
     private static String getWsPathValue(PsiAnnotation annotation) {
         String value = PsiAnnotationHelper.getAnnotationAttributeValue(annotation, "value");
 
@@ -24,13 +35,14 @@ public class JaxrsAnnotationHelper {
     }
 
     /**
-     * 过滤所有注解
-     * @param psiMethod
-     * @return
+     * 解析方法上的 JAX-RS 请求路径和请求方法组合。
+     *
+     * @param psiMethod 目标方法
+     * @return 解析后的请求路径数组
      */
     public static RequestPath[] getRequestPaths(PsiMethod psiMethod) {
         PsiAnnotation[] annotations = psiMethod.getModifierList().getAnnotations();
-        if(annotations == null) return null;
+        if (annotations == null) return null;
         List<RequestPath> list = new ArrayList<>();
 
         PsiAnnotation wsPathAnnotation = psiMethod.getModifierList().findAnnotation(JaxrsPathAnnotation.PATH.getQualifiedName());
@@ -38,15 +50,7 @@ public class JaxrsAnnotationHelper {
 
         JaxrsHttpMethodAnnotation[] jaxrsHttpMethodAnnotations = JaxrsHttpMethodAnnotation.values();
 
-        /*for (PsiAnnotation annotation : annotations) {
-            for (JaxrsHttpMethodAnnotation methodAnnotation : jaxrsHttpMethodAnnotations) {
-                if (annotation.getQualifiedName().equals(methodAnnotation.getQualifiedName())) {
-                    list.add(new RequestPath(path, methodAnnotation.getShortName()));
-                }
-            }
-        }*/
-
-        Arrays.stream(annotations).forEach(a-> Arrays.stream(jaxrsHttpMethodAnnotations).forEach(methodAnnotation-> {
+        Arrays.stream(annotations).forEach(a -> Arrays.stream(jaxrsHttpMethodAnnotations).forEach(methodAnnotation -> {
             if (a.getQualifiedName().equals(methodAnnotation.getQualifiedName())) {
                 list.add(new RequestPath(path, methodAnnotation.getShortName()));
             }
@@ -55,7 +59,12 @@ public class JaxrsAnnotationHelper {
         return list.toArray(new RequestPath[list.size()]);
     }
 
-
+    /**
+     * 获取类级别的 JAX-RS 路径。
+     *
+     * @param psiClass 目标类
+     * @return 类级路径
+     */
     public static String getClassUriPath(PsiClass psiClass) {
         PsiAnnotation annotation = psiClass.getModifierList().findAnnotation(JaxrsPathAnnotation.PATH.getQualifiedName());
 
@@ -64,7 +73,12 @@ public class JaxrsAnnotationHelper {
         return path != null ? path : "";
     }
 
-
+    /**
+     * 获取方法级的 JAX-RS 路径展示值。
+     *
+     * @param psiMethod 目标方法
+     * @return 方法路径，未显式声明时回退为方法名
+     */
     public static String getMethodUriPath(PsiMethod psiMethod) {
         JaxrsHttpMethodAnnotation requestAnnotation = null;
 
@@ -72,24 +86,19 @@ public class JaxrsAnnotationHelper {
                 psiMethod.getModifierList().findAnnotation(annotation.getQualifiedName()) != null
         ).collect(Collectors.toList());
 
-       /* if (httpMethodAnnotations.size() == 0) {
-            requestAnnotation = null;
-        }*/
-
         if (httpMethodAnnotations.size() > 0) {
             requestAnnotation = httpMethodAnnotations.get(0);
         }
 
         String mappingPath;
-        if(requestAnnotation != null){
+        if (requestAnnotation != null) {
             PsiAnnotation annotation = psiMethod.getModifierList().findAnnotation(JaxrsPathAnnotation.PATH.getQualifiedName());
             mappingPath = getWsPathValue(annotation);
-        }else {
+        } else {
             String methodName = psiMethod.getName();
             mappingPath = StringUtils.uncapitalize(methodName);
         }
 
         return mappingPath;
     }
-
 }

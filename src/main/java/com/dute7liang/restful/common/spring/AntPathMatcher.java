@@ -60,12 +60,7 @@ import java.util.regex.Pattern;
  * that users of this implementation to sanitize patterns in order to prefix
  * them with "/" as it makes sense in the context in which they're used.
  *
- * @author Alef Arendsen
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Arjen Poutsma
- * @author Rossen Stoyanchev
- * @author Sam Brannen
+ * @author dute7liang
  * @since 16.07.2003
  */
 public class AntPathMatcher /*implements PathMatcher*/ {

@@ -33,14 +33,7 @@ import java.util.StringTokenizer;
  * classes. It also provides easy-to-use methods to convert between
  * delimited strings, such as CSV strings, and collections and arrays.
  *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @author Keith Donald
- * @author Rob Harrop
- * @author Rick Evans
- * @author Arjen Poutsma
- * @author Sam Brannen
- * @author Brian Clozel
+ * @author dute7liang
  * @since 16 April 2001
  */
 public abstract class StringUtils {

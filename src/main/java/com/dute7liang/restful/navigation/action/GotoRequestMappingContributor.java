@@ -10,7 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-//
+/**
+ * 为“Go to Service”弹窗提供名称列表和导航项数据。
+ *
+ * @author dute7liang
+ */
 public class GotoRequestMappingContributor implements ChooseByNameContributor {
     Module myModule;
 
@@ -20,11 +24,22 @@ public class GotoRequestMappingContributor implements ChooseByNameContributor {
     private boolean cachedOnlyThisModuleChecked;
     private boolean cacheLoaded;
 
+    /**
+     * 创建服务导航项提供者。
+     *
+     * @param myModule 当前模块，可为空
+     */
     public GotoRequestMappingContributor(Module myModule) {
         this.myModule = myModule;
     }
 
-    //Returns the list of names for the specified project to which it is possible to navigate by name. 所有该类型的文件列表
+    /**
+     * 返回当前作用域内可导航的服务名称列表。
+     *
+     * @param project 当前项目
+     * @param onlyThisModuleChecked 是否仅限制当前模块
+     * @return 服务名称数组
+     */
     @NotNull
     @Override
     public String[] getNames(Project project, boolean onlyThisModuleChecked) {
@@ -33,7 +48,6 @@ public class GotoRequestMappingContributor implements ChooseByNameContributor {
         }
 
         List<RestServiceItem> itemList;
-        ///todo 查找 project 中所有符合 rest url 类型文件，包含 request 接口
         if (onlyThisModuleChecked && myModule != null) {
             itemList = ServiceHelper.buildRestServiceItemListUsingResolver(myModule);
         } else {
@@ -51,26 +65,19 @@ public class GotoRequestMappingContributor implements ChooseByNameContributor {
         cacheLoaded = true;
         return cachedNames;
     }
-/*
 
-    private List<RestServiceItem> findAllRestServiceItemList(Module myModule) {
-//        List<RestServiceItem> itemList = ServiceHelper.buildRestServiceItemList(myModule);
-        return ServiceHelper.buildRestServiceItemListUsingResolver(myModule);
-    }
-
-    private List<RestServiceItem> findAllRestServiceItemList(Project project) {
-//        Arrays.stream(SpringRequestAnnotation.values()).flatMap(annotation -> )
-        List<RestServiceItem> itemList = ServiceHelper.buildRestServiceItemList(project);
-
-        return itemList;
-    }
-*/
-
-    //Returns the list of navigation items matching the specified name. 匹配，对比
+    /**
+     * 根据名称返回对应的导航项。
+     *
+     * @param name 当前匹配名称
+     * @param pattern 用户输入模式
+     * @param project 当前项目
+     * @param onlyThisModuleChecked 是否仅限制当前模块
+     * @return 导航项数组
+     */
     @NotNull
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean onlyThisModuleChecked) {
-//        AntPathMatcher
         if (!cacheLoaded) {
             getNames(project, onlyThisModuleChecked);
         }
