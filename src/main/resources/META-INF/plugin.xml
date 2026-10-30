@@ -1,7 +1,7 @@
 <idea-plugin url="https://plugins.jetbrains.com" allow-bundled-update="true">
     <id>com.dute7liang.restful.search</id>
     <name>RestfulSearch</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor email="dute7liangg@gmail.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
 
     <description><![CDATA[
@@ -42,13 +42,14 @@
   <p><i>Note: This version requires IntelliJ IDEA 2026.2 or newer.</i></p>
 ]]></description>
     <change-notes><![CDATA[
-  <h4>1.2.0</h4>
+  <h4>1.2.1</h4>
   <ul>
     <li>Raised the minimum supported IntelliJ IDEA version to 2026.2.</li>
     <li>Removed internal IdeBundle API usage reported by compatibility checks in newer IntelliJ IDEA versions.</li>
     <li>Added Chinese and English translations for the two "no matches found" search messages, following the IDE UI language.</li>
+    <li>Added a Copy Service Path button to the search popup for copying the selected endpoint path.</li>
   </ul>
-  <p>最低支持版本调整为 IntelliJ IDEA 2026.2；修复新版 IntelliJ IDEA 兼容性检查报告的 IdeBundle 内部 API 引用问题；为两条搜索无匹配结果提示新增中英文支持，跟随 IDE 界面语言。</p>
+  <p>最低支持版本调整为 IntelliJ IDEA 2026.2；修复新版 IntelliJ IDEA 兼容性检查报告的 IdeBundle 内部 API 引用问题；为两条搜索无匹配结果提示新增中英文支持，跟随 IDE 界面语言；新增搜索弹窗复制按钮，可复制所选接口路径。</p>
 
   <h4>1.1.0</h4>
   <ul>

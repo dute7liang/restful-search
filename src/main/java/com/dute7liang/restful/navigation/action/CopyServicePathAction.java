@@ -7,15 +7,22 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.dute7liang.restful.common.ToolkitIcons;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 复制“Go to Service”弹窗中当前选中的 REST 接口路径。
  */
 public class CopyServicePathAction extends AnAction implements DumbAware {
     public static final String ACTION_ID = "RestfulSearch.CopyServicePath";
+    private final RestServiceChooseByNamePopup targetPopup;
 
     public CopyServicePathAction() {
+        this(null);
+    }
+
+    CopyServicePathAction(@Nullable RestServiceChooseByNamePopup targetPopup) {
         super("Copy Service Path", "Copy selected service path", ToolkitIcons.Copy);
+        this.targetPopup = targetPopup;
     }
 
     @Override
@@ -38,6 +45,9 @@ public class CopyServicePathAction extends AnAction implements DumbAware {
     }
 
     private RestServiceChooseByNamePopup getCurrentPopup(Project project) {
+        if (targetPopup != null) {
+            return targetPopup;
+        }
         if (project == null) {
             return null;
         }

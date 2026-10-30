@@ -68,7 +68,7 @@ public class GotoRequestMappingAction extends GotoActionBase implements DumbAwar
         };
 
         GotoRequestMappingProvider provider = new GotoRequestMappingProvider(getPsiContext(e));
-        showNavigationPopup(e, model, callback, "Request Mapping Url matching pattern", true, true, (ChooseByNameItemProvider) provider);
+        showServicePopup(e, model, callback, true, true, provider);
     }
 
     /**
@@ -77,20 +77,17 @@ public class GotoRequestMappingAction extends GotoActionBase implements DumbAwar
      * @param e 动作事件
      * @param model 搜索模型
      * @param callback 选择回调
-     * @param findUsagesTitle 弹窗标题
      * @param useSelectionFromEditor 是否使用编辑器选中内容
      * @param allowMultipleSelection 是否允许多选
      * @param itemProvider 数据提供器
      * @param <T> 过滤值类型
      */
-    @Override
-    protected <T> void showNavigationPopup(AnActionEvent e,
-                                           ChooseByNameModel model,
-                                           final GotoActionCallback<T> callback,
-                                           @Nullable final String findUsagesTitle,
-                                           boolean useSelectionFromEditor,
-                                           final boolean allowMultipleSelection,
-                                           final ChooseByNameItemProvider itemProvider) {
+    private <T> void showServicePopup(AnActionEvent e,
+                                     ChooseByNameModel model,
+                                     final GotoActionCallback<T> callback,
+                                     boolean useSelectionFromEditor,
+                                     final boolean allowMultipleSelection,
+                                     final ChooseByNameItemProvider itemProvider) {
         final Project project = e.getData(CommonDataKeys.PROJECT);
         boolean mayRequestOpenInCurrentWindow = model.willOpenEditor() && FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(useSelectionFromEditor, e);
@@ -98,7 +95,8 @@ public class GotoRequestMappingAction extends GotoActionBase implements DumbAwar
         String copiedURL = tryFindCopiedURL();
         String predefinedText = start.first == null ? copiedURL : start.first;
 
-        showNavigationPopup(callback, findUsagesTitle,
+        // SDK 要求传入查找结果标题；null 表示不启用原生图钉功能。
+        showNavigationPopup(callback, null,
                 RestServiceChooseByNamePopup.createPopup(project, model, itemProvider, predefinedText,
                         mayRequestOpenInCurrentWindow,
                         start.second), allowMultipleSelection);

@@ -18,6 +18,8 @@ package com.dute7liang.restful.navigation.action;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
@@ -28,6 +30,7 @@ import com.dute7liang.utils.ToolkitUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JComponent;
 import java.awt.datatransfer.StringSelection;
 
 /**
@@ -54,6 +57,26 @@ public class RestServiceChooseByNamePopup extends ChooseByNamePopup {
     }
 
     /**
+     * 将复制按钮加入原有筛选工具栏，保持按钮尺寸和垂直位置一致。
+     *
+     * @param toolArea 原有工具区
+     */
+    @Override
+    public void setToolArea(@NotNull JComponent toolArea) {
+        // findToolbarBy 只查找父组件，原生筛选工具区本身就是工具栏。
+        ActionToolbar toolbar = toolArea instanceof ActionToolbar actionToolbar
+                ? actionToolbar : ActionToolbar.findToolbarBy(toolArea);
+        if (toolbar != null) {
+            // 原生筛选工具栏绑定的面板在菜单打开前不可见，会导致点击被平台忽略。
+            toolbar.setTargetComponent(getTextField());
+            if (toolbar.getActionGroup() instanceof DefaultActionGroup actionGroup) {
+                actionGroup.add(new CopyServicePathAction(this));
+            }
+        }
+        super.setToolArea(toolArea);
+    }
+
+    /**
      * 创建或复用一个服务搜索弹窗。
      *
      * @param project 当前项目
@@ -77,6 +100,7 @@ public class RestServiceChooseByNamePopup extends ChooseByNamePopup {
 
         ChooseByNamePopup reusablePopup = StringUtil.isEmptyOrSpaces(predefinedText) ? oldPopup : null;
         RestServiceChooseByNamePopup newPopup = new RestServiceChooseByNamePopup(project, model, provider, reusablePopup, predefinedText, mayRequestOpenInCurrentWindow, initialIndex);
+        newPopup.setShowListForEmptyPattern(true);
 
         if (project != null) {
             project.putUserData(CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY, newPopup);
