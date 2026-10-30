@@ -19,9 +19,9 @@
 
 ## 兼容性规范
 
-- 当前 IntelliJ 平台目标基线为 `2024.3`。
-- 当前插件最低兼容 build 为 `243`。
-- 当前 Java 版本基线为 `21`。
+- 当前 IntelliJ 平台目标基线为 `2026.2.3`。
+- 当前插件最低兼容 build 为 `262`。
+- 当前 Java 版本基线为 `25`。
 - 涉及插件兼容性、平台 API、依赖升级或构建参数调整时，必须先核对 `build.gradle.kts` 与 `gradle.properties` 中的实际配置。
 - 未经用户明确确认，不要主动修改 `platformVersion`、`platformSinceBuild`、`javaVersion`、插件 ID、插件版本或其他会影响发布兼容性的核心参数。
 - 如果某项改动可能导致最低兼容版本变化，必须先明确告知影响，再等待用户确认。

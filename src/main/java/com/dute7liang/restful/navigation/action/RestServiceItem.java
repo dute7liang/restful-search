@@ -8,6 +8,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.codeStyle.MinusculeMatcher;
+import com.intellij.psi.codeStyle.NameUtil;
+import com.intellij.util.text.matching.MatchingMode;
 import com.dute7liang.restful.common.ToolkitIcons;
 import com.dute7liang.restful.method.HttpMethod;
 import com.dute7liang.restful.method.action.ModuleHelper;
@@ -122,7 +125,9 @@ public class RestServiceItem implements NavigationItem {
             return true;
         }
 
-        com.intellij.psi.codeStyle.MinusculeMatcher matcher = com.intellij.psi.codeStyle.NameUtil.buildMatcher("*" + pattern, com.intellij.psi.codeStyle.NameUtil.MatchingCaseSensitivity.NONE);
+        MinusculeMatcher matcher = NameUtil.buildMatcher("*" + pattern)
+                .withMatchingMode(MatchingMode.IGNORE_CASE)
+                .build();
         return matcher.matches(this.url);
     }
 

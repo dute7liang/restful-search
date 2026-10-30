@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
+import com.intellij.util.text.matching.MatchingMode;
 import com.dute7liang.restful.common.RestfulSearchBundle;
 import com.dute7liang.restful.common.spring.AntPathMatcher;
 import com.dute7liang.restful.method.HttpMethod;
@@ -184,7 +185,9 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
         if (pattern.equals("/")) return true;
         // REST风格的参数  @RequestMapping(value="{departmentId}/employees/{employeeId}")  PathVariable
         // REST风格的参数（正则） @RequestMapping(value="/{textualPart:[a-z-]+}.{numericPart:[\\d]+}")  PathVariable
-        MinusculeMatcher matcher = NameUtil.buildMatcher("*" + pattern, NameUtil.MatchingCaseSensitivity.NONE);
+        MinusculeMatcher matcher = NameUtil.buildMatcher("*" + pattern)
+                .withMatchingMode(MatchingMode.IGNORE_CASE)
+                .build();
         boolean matches = matcher.matches(popupItem);
         if (!matches) {
             AntPathMatcher pathMatcher = new AntPathMatcher();

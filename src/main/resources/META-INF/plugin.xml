@@ -39,15 +39,16 @@
     <li>搜索结果以统一列表展示，并带有 HTTP 方法标识（GET, POST 等）。</li>
   </ul>
 
-  <p><i>Note: This version targets IntelliJ IDEA 2024.3 and newer releases.</i></p>
+  <p><i>Note: This version requires IntelliJ IDEA 2026.2 or newer.</i></p>
 ]]></description>
     <change-notes><![CDATA[
   <h4>1.2.0</h4>
   <ul>
+    <li>Raised the minimum supported IntelliJ IDEA version to 2026.2.</li>
     <li>Removed internal IdeBundle API usage reported by compatibility checks in newer IntelliJ IDEA versions.</li>
     <li>Added Chinese and English translations for the two "no matches found" search messages, following the IDE UI language.</li>
   </ul>
-  <p>修复新版 IntelliJ IDEA 兼容性检查报告的 IdeBundle 内部 API 引用问题；为两条搜索无匹配结果提示新增中英文支持，跟随 IDE 界面语言。</p>
+  <p>最低支持版本调整为 IntelliJ IDEA 2026.2；修复新版 IntelliJ IDEA 兼容性检查报告的 IdeBundle 内部 API 引用问题；为两条搜索无匹配结果提示新增中英文支持，跟随 IDE 界面语言。</p>
 
   <h4>1.1.0</h4>
   <ul>
@@ -66,7 +67,7 @@
 ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="243"/>
+    <idea-version since-build="262"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

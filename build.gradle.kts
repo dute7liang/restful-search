@@ -9,9 +9,9 @@ plugins {
 // 插件坐标信息，会同步到最终产物的 group/version。
 val pluginGroupValue = providers.gradleProperty("pluginGroup").get()
 val pluginVersionValue = providers.gradleProperty("pluginVersion").get()
-// 目标 IntelliJ 平台版本，例如 2024.3。
+// 目标 IntelliJ 平台版本，例如 2026.2.3。
 val platformVersionValue = providers.gradleProperty("platformVersion").get()
-// 插件声明的最低兼容 build 号，例如 243 表示 2024.3。
+// 插件声明的最低兼容 build 号，262 表示 2026.2。
 val platformSinceBuildValue = providers.gradleProperty("platformSinceBuild").get()
 // Java 编译目标版本。这里需要和所选 IntelliJ 平台要求保持一致。
 val javaVersionValue = providers.gradleProperty("javaVersion").get().toInt()
@@ -65,10 +65,7 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            // recommended() 会选择插件官方推荐的一组 IDE 版本做校验，
-            // 不一定等于最低兼容版本；如果需要固定校验 2024.3，需要改成显式指定版本。
-//            recommended()
-            create("IU", "2024.3")
+            // 本分支最低支持 IDEA 2026.2，固定校验当前目标版本。
             create("IU", "2026.2.3")
         }
     }
