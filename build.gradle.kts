@@ -67,7 +67,9 @@ intellijPlatform {
         ides {
             // recommended() 会选择插件官方推荐的一组 IDE 版本做校验，
             // 不一定等于最低兼容版本；如果需要固定校验 2024.3，需要改成显式指定版本。
-            recommended()
+//            recommended()
+            create("IU", "2024.3")
+            create("IU", "2026.2.3")
         }
     }
 }

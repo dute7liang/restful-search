@@ -18,12 +18,17 @@ package com.dute7liang.restful.navigation.action;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
+import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.ui.MessageType;
+import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.dute7liang.utils.ToolkitUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.datatransfer.StringSelection;
 
 /**
  * 对 IntelliJ 原生 ChooseByNamePopup 的轻量包装，用于复用服务搜索弹窗实例并预处理输入内容。
@@ -65,15 +70,13 @@ public class RestServiceChooseByNamePopup extends ChooseByNamePopup {
                                                            @Nullable final String predefinedText,
                                                            boolean mayRequestOpenInCurrentWindow,
                                                            final int initialIndex) {
-        if (!StringUtil.isEmptyOrSpaces(predefinedText)) {
-            return new RestServiceChooseByNamePopup(project, model, provider, null, predefinedText, mayRequestOpenInCurrentWindow, initialIndex);
-        }
-
         final RestServiceChooseByNamePopup oldPopup = project == null ? null : project.getUserData(CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY);
         if (oldPopup != null) {
             oldPopup.close(false);
         }
-        RestServiceChooseByNamePopup newPopup = new RestServiceChooseByNamePopup(project, model, provider, oldPopup, predefinedText, mayRequestOpenInCurrentWindow, initialIndex);
+
+        ChooseByNamePopup reusablePopup = StringUtil.isEmptyOrSpaces(predefinedText) ? oldPopup : null;
+        RestServiceChooseByNamePopup newPopup = new RestServiceChooseByNamePopup(project, model, provider, reusablePopup, predefinedText, mayRequestOpenInCurrentWindow, initialIndex);
 
         if (project != null) {
             project.putUserData(CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY, newPopup);
@@ -124,5 +127,39 @@ public class RestServiceChooseByNamePopup extends ChooseByNamePopup {
 
         String name = enteredText.substring(index + 1).trim();
         return StringUtil.isEmptyOrSpaces(name) ? null : name;
+    }
+
+    /**
+     * 判断当前结果列表是否选中了可复制的服务项。
+     *
+     * @return 已选中服务项时返回 {@code true}
+     */
+    public boolean hasSelectedServiceItem() {
+        return getSelectedServiceItem() != null;
+    }
+
+    /**
+     * 复制当前选中服务项的纯接口路径。
+     */
+    public void copySelectedServicePath() {
+        RestServiceItem selectedItem = getSelectedServiceItem();
+        if (selectedItem == null) {
+            PopupUtil.showBalloonForActiveComponent("No service path selected", MessageType.WARNING);
+            return;
+        }
+
+        String servicePath = selectedItem.getUrl();
+        CopyPasteManager.getInstance().setContents(new StringSelection(servicePath));
+        PopupUtil.showBalloonForActiveComponent("Copied: " + StringUtil.escapeXmlEntities(servicePath), MessageType.INFO);
+    }
+
+    @Nullable
+    private RestServiceItem getSelectedServiceItem() {
+        Object selectedValue = myList.getSelectedValue();
+        if (selectedValue instanceof RestServiceItem) {
+            return (RestServiceItem) selectedValue;
+        }
+
+        return null;
     }
 }

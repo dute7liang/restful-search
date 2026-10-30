@@ -49,5 +49,6 @@ public class ToolkitIcons {
 
     public static final Icon MODULE = AllIcons.Nodes.ModuleGroup;
     public static final Icon Refresh = AllIcons.Actions.Refresh;
+    public static final Icon Copy = AllIcons.Actions.Copy;
     public static final Icon SERVICE = IconLoader.getIcon("/icons/service.png", ToolkitIcons.class);
 }

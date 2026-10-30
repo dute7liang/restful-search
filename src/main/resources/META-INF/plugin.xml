@@ -1,7 +1,7 @@
 <idea-plugin url="https://plugins.jetbrains.com" allow-bundled-update="true">
     <id>com.dute7liang.restful.search</id>
     <name>RestfulSearch</name>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <vendor email="dute7liangg@gmail.com" url="https://github.com/dute7liang/restful-search">dute7liang</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,13 @@
   <p><i>Note: This version targets IntelliJ IDEA 2024.3 and newer releases.</i></p>
 ]]></description>
     <change-notes><![CDATA[
+  <h4>1.2.0</h4>
+  <ul>
+    <li>Removed internal IdeBundle API usage reported by compatibility checks in newer IntelliJ IDEA versions.</li>
+    <li>Added Chinese and English translations for the two "no matches found" search messages, following the IDE UI language.</li>
+  </ul>
+  <p>修复新版 IntelliJ IDEA 兼容性检查报告的 IdeBundle 内部 API 引用问题；为两条搜索无匹配结果提示新增中英文支持，跟随 IDE 界面语言。</p>
+
   <h4>1.1.0</h4>
   <ul>
     <li>Added compatibility support for IntelliJ IDEA 2024.3 and newer releases.</li>
@@ -90,5 +97,8 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
         </action>
+        <action id="RestfulSearch.CopyServicePath" class="com.dute7liang.restful.navigation.action.CopyServicePathAction"
+                text="Copy Service Path" description="Copy selected service path"
+                icon="AllIcons.Actions.Copy"/>
     </actions>
 </idea-plugin>

@@ -1,6 +1,5 @@
 package com.dute7liang.restful.navigation.action;
 
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.gotoByName.CustomMatcherModel;
 import com.intellij.ide.util.gotoByName.FilteringGotoByModel;
@@ -11,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
+import com.dute7liang.restful.common.RestfulSearchBundle;
 import com.dute7liang.restful.common.spring.AntPathMatcher;
 import com.dute7liang.restful.method.HttpMethod;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +80,7 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
      */
     @Override
     public String getNotInMessage() {
-        return IdeBundle.message("label.no.matches.found.in.project");
+        return RestfulSearchBundle.message("service.search.no.matches.in.project");
     }
 
     /**
@@ -90,7 +90,7 @@ public class GotoRequestMappingModel extends FilteringGotoByModel<HttpMethod> im
      */
     @Override
     public String getNotFoundMessage() {
-        return IdeBundle.message("label.no.matches.found");
+        return RestfulSearchBundle.message("service.search.no.matches");
     }
 
     /**
