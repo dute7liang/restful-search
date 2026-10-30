@@ -13,6 +13,8 @@ val pluginVersionValue = providers.gradleProperty("pluginVersion").get()
 val platformVersionValue = providers.gradleProperty("platformVersion").get()
 // 插件声明的最低兼容 build 号，例如 243 表示 2024.3。
 val platformSinceBuildValue = providers.gradleProperty("platformSinceBuild").get()
+// 封存分支的最高兼容 build，261.* 表示 2026.1 的全部补丁版本。
+val platformUntilBuildValue = providers.gradleProperty("platformUntilBuild").get()
 // Java 编译目标版本。这里需要和所选 IntelliJ 平台要求保持一致。
 val javaVersionValue = providers.gradleProperty("javaVersion").get().toInt()
 
@@ -58,8 +60,9 @@ intellijPlatform {
         version = project.version.toString()
 
         ideaVersion {
-            // 只声明最低兼容版本；不设 untilBuild，表示后续版本先保持开放。
+            // 封存版本仅支持 IntelliJ IDEA 2024.3 至 2026.1.*。
             sinceBuild = platformSinceBuildValue
+            untilBuild = platformUntilBuildValue
         }
     }
 
